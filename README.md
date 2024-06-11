@@ -13,3 +13,5 @@ In the main project directory you can use the command:
 
 This will run the app in development mode and will open in your browser at http://localhost:3000.
 
+## What the application does
+At current the application will render out "cards" for each Pokemon and some information about those pokemon. You can then scroll through these cards in pages.
