@@ -42,7 +42,7 @@ function App() {
       setPreviousPageBtnDisabled(false);
     }
 
-  }, [pokemonData])
+  }, [nextUrl, previousUrl])
 
   const nextPage = async () => {
     setLoading(true);
