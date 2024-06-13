@@ -7,10 +7,12 @@ import { getAllPokemon, getPokemon } from './services/pokemon';
 function App() {
   // Creating states for data related to API
   const [pokemonData, setPokemonData] = useState({});
-  const [nextUrl, setNextUrl] = useState("");
-  const [previousUrl, setPreviousUrl] = useState("");
+  const [nextUrl, setNextUrl] = useState('');
+  const [previousUrl, setPreviousUrl] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1)
 
+  // Setting states for buttons used to navigate cards
   const [previousPageBtnDisabled, setPreviousPageBtnDisabled] = useState(true);
   const [nextPageBtnDisabled, setNextPageBtnDisabled] = useState(false);
 
@@ -20,7 +22,6 @@ function App() {
   useEffect (() => {
     async function fetchData() {
       let response = await getAllPokemon(initialUrl)
-      console.log(response)
       setNextUrl(response.next);
       setPreviousUrl(response.previous);
       await loadingPokemon(response.results);
@@ -50,6 +51,7 @@ function App() {
     await loadingPokemon(data.results);
     setNextUrl(data.next);
     setPreviousUrl(data.previous);
+    setCurrentPage(parseInt(currentPage) + 1);
     setLoading(false);
   }
 
@@ -59,6 +61,24 @@ function App() {
     await loadingPokemon(data.results);
     setNextUrl(data.next);
     setPreviousUrl(data.previous);
+    setCurrentPage(parseInt(currentPage) - 1);
+    setLoading(false);
+  }
+
+  const numberedPage = async (event) => {
+    setLoading(true);
+    let pageNumber = event.target.value;
+    let offset;
+    if (pageNumber > 1) {
+      offset = (20 * pageNumber) - 20;
+    } else {
+      offset = 0;
+    }
+    let data = await getAllPokemon(`https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`);
+    await loadingPokemon(data.results);
+    setNextUrl(data.next);
+    setPreviousUrl(data.previous);
+    setCurrentPage(pageNumber)
     setLoading(false);
   }
 
@@ -76,7 +96,29 @@ function App() {
     setPokemonData(_pokemonData);
   };
 
-  //console.log(pokemonData)
+  // needs to run on a re-render - as the pokemon goes back to 1 but index does
+  const PageIndexing = () => {
+    const buttons = [];
+    let newPageNumber = -2
+
+    for (let i = 1; i <= 5; i++) {
+      let pageNumber;
+      if (currentPage < 3) {
+        pageNumber = i;
+      } else {
+        // needs to use parseInt otherwise '+' concatenates the numbers instead
+        pageNumber = parseInt(newPageNumber) + parseInt(currentPage);
+      }
+      buttons.push(
+        <button onClick={numberedPage} key={pageNumber} value={pageNumber}>{pageNumber}</button>
+      )
+      newPageNumber++;
+    }
+
+    return buttons;
+
+  }
+
   return (
     <div>
       <Navbar />
@@ -85,6 +127,7 @@ function App() {
           <>
             <div className="btn">
               <button disabled={previousPageBtnDisabled} onClick={previousPage}>Previous Page</button>
+              <PageIndexing />
               <button disabled={nextPageBtnDisabled} onClick={nextPage}>Next Page</button>
             </div>
             <div className='grid-container'>
@@ -94,6 +137,7 @@ function App() {
             </div>
             <div className="btn">
               <button onClick={previousPage}>Previous Page</button>
+              <PageIndexing />
               <button onClick={nextPage}>Next Page</button>
           </div>
           </>

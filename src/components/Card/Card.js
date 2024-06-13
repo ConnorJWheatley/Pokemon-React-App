@@ -14,6 +14,7 @@ function Card({pokemon}) {
             <div className='Card__types' >
                 {
                     pokemon.types.map(type => {
+                        // needs a key to make unique
                         return (
                             <div 
                                 className="Card__type"

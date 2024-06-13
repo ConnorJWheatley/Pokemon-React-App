@@ -5,6 +5,10 @@ export async function getAllPokemon(url) {
             .then(data => {
                 resolve(data);
             })
+            .catch((error) => {
+                console.error('Error fetching data: ', error);
+                alert('An error occurred whilst fetching the data')
+            })
     })
 }
 
