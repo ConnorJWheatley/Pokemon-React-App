@@ -1,0 +1,38 @@
+@keyframes running {
+  from {background-color: aqua;}
+  to {background-color: red;}
+}
+
+.loading-gif-div {
+  height: auto;
+  padding: 5px;
+  text-align: center;
+}
+
+/* Not sure how to make the gif have a minimum size as it scales down too much when window size is small */
+.loading-gif {
+  width: 5%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.btn button {
+  border-style: none;
+  padding: 5px 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  background: #30a7d7;
+  color: white;
+  font-size: 1em;
+}
+
+.btn :disabled {
+  background-color: grey;
+}
